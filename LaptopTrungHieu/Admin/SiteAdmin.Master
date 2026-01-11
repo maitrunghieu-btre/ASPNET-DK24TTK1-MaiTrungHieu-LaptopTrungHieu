@@ -1,0 +1,220 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="SiteAdmin.master.cs" Inherits="Laptop.Admin.SiteAdmin" %>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản trị hệ thống | Laptop Trung Hiếu</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- 1. SIDEBAR (MENU TRÁI) --- */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            /* Gradient Xanh Đậm chủ đạo */
+            background: linear-gradient(180deg, #004494 0%, #003366 100%);
+            color: #fff;
+            position: fixed;
+            top: 0; left: 0;
+            padding-top: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.2);
+            border-right: 1px solid rgba(255,255,255,0.1);
+            overflow-y: auto; /* Cho phép cuộn nếu menu dài */
+        }
+
+        /* Scrollbar cho Sidebar */
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+        .sidebar-brand {
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-brand h4 {
+            color: #fff;
+            font-weight: 800;
+            margin: 0;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .user-panel {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .user-avatar {
+            width: 40px; height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 15px;
+            color: #004494;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .sidebar-menu { padding: 15px 10px; padding-bottom: 50px; }
+
+        /* Tiêu đề nhóm menu */
+        .menu-header {
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.5);
+            margin: 20px 0 8px 15px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Link Menu */
+        .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            border: 1px solid transparent;
+            display: flex; align-items: center;
+        }
+
+        .nav-link i {
+            width: 25px; text-align: center; margin-right: 10px; opacity: 0.8; font-size: 1.1rem;
+        }
+
+        /* Hover & Active */
+        .nav-link:hover, .nav-link.active {
+            background-color: #fff; 
+            color: #004494;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transform: translateX(5px);
+        }
+        
+        .nav-link:hover i, .nav-link.active i { opacity: 1; }
+
+        .nav-link.logout { margin-top: 30px; background: rgba(255, 0, 0, 0.1); color: #ffcccc; }
+        .nav-link.logout:hover { background-color: #dc3545; color: white; }
+
+        /* --- 2. MAIN CONTENT --- */
+        .main-content {
+            margin-left: 260px;
+            padding: 25px;
+            transition: 0.3s;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: #fff;
+            color: #333;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #004494;
+        }
+
+        .page-title { 
+            margin: 0; font-weight: 800; color: #004494; font-size: 1.3rem; text-transform: uppercase;
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .sidebar { margin-left: -260px; }
+            .sidebar.show { margin-left: 0; }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <h4><i class="fa-brands fa-windows me-2"></i>Trung Hiếu</h4>
+            </div>
+
+            <div class="user-panel">
+                <div class="user-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                <div class="info">
+                    <div class="d-block text-white fw-bold"><asp:Literal ID="litAdminName" runat="server"></asp:Literal></div>
+                    <small class="text-white-50"><i class="fa-solid fa-circle me-1 text-warning" style="font-size: 8px;"></i>Admin</small>
+                </div>
+            </div>
+
+            <div class="sidebar-menu nav flex-column">
+                <a href="Dashboard.aspx" class="nav-link"><i class="fa-solid fa-gauge-high"></i>Tổng quan</a>
+                
+                <div class="menu-header">Sản phẩm & Danh mục</div>
+                <a href="QuanLySanPham.aspx" class="nav-link"><i class="fa-solid fa-laptop"></i>Sản phẩm (Laptop)</a>
+                <a href="QuanLyDanhMuc.aspx" class="nav-link"><i class="fa-solid fa-tags"></i>Thương hiệu</a>
+
+                <div class="menu-header">Quản lý Kho</div>
+                <a href="QuanLyNhaPhanPhoi.aspx" class="nav-link"><i class="fa-solid fa-truck-fast"></i>Nhà phân phối</a>
+                <a href="QuanLyNhapHang.aspx" class="nav-link"><i class="fa-solid fa-boxes-packing"></i>Nhập hàng</a>
+
+                <div class="menu-header">Kinh doanh</div>
+                <a href="QuanLyDonHang.aspx" class="nav-link"><i class="fa-solid fa-file-invoice-dollar"></i>Đơn đặt hàng</a>
+                <a href="QuanLyNguoiDung.aspx" class="nav-link"><i class="fa-solid fa-users"></i>Khách hàng</a>
+
+                <div class="menu-header">Hệ thống</div>
+                <a href="QuanLyBanner.aspx" class="nav-link"><i class="fa-solid fa-images"></i>Quản lý Banner</a>
+
+                <div class="border-top my-3 border-secondary opacity-50"></div>
+                
+                <a href="../Default.aspx" class="nav-link" target="_blank"><i class="fa-solid fa-house"></i>Về trang chủ</a>
+                <asp:LinkButton ID="btnLogout" runat="server" CssClass="nav-link logout" OnClick="btnLogout_Click">
+                    <i class="fa-solid fa-right-from-bracket"></i>Đăng xuất
+                </asp:LinkButton>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <div class="top-bar">
+                <div class="d-flex align-items-center">
+                    <i class="fa-solid fa-bars me-3 d-md-none fs-4" onclick="document.querySelector('.sidebar').classList.toggle('show')"></i>
+                    <h2 class="page-title">
+                        <asp:ContentPlaceHolder ID="PageTitle" runat="server"></asp:ContentPlaceHolder>
+                    </h2>
+                </div>
+                
+                <div class="text-secondary fw-bold small">
+                    <i class="fa-regular fa-calendar me-1"></i>
+                    <%= DateTime.Now.ToString("dd/MM/yyyy") %>
+                </div>
+            </div>
+
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,267 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Laptop.SiteMaster" %>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head runat="server">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laptop Trung Hiếu - Công nghệ đỉnh cao</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- TÔNG MÀU CHỦ ĐẠO --- */
+        :root { 
+            --primary-color: #0056b3;       /* Xanh dương đậm */
+            --primary-dark: #004494;        /* Xanh tối hơn khi hover */
+            --accent-color: #00a8ff;        /* Xanh sáng tạo điểm nhấn */
+            --text-dark: #333;
+            --bg-color: #f0f2f5; 
+        }
+        
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-color); font-size: 14px; color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; }
+        a { text-decoration: none; transition: all 0.2s; }
+        
+        /* Top Header */
+        .top-header { background-color: var(--primary-dark); color: white; padding: 6px 0; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .top-header a { color: #eef; margin-right: 15px; }
+        .top-header a:hover { color: #fff; text-decoration: underline; }
+
+        /* Header chính */
+        .main-header { background: #fff; padding: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; z-index: 100; }
+        .brand-logo { font-size: 1.8rem; font-weight: 900; color: var(--primary-color); text-transform: uppercase; display: flex; align-items: center; letter-spacing: 1px; }
+        .brand-logo i { margin-right: 10px; color: var(--accent-color); }
+
+        /* Thanh tìm kiếm */
+        .search-box .form-control { border-radius: 50px 0 0 50px; border: 2px solid #e1e1e1; border-right: none; padding-left: 20px; }
+        .search-box .form-control:focus { box-shadow: none; border-color: var(--primary-color); }
+        .search-box .btn { border-radius: 0 50px 50px 0; border: 2px solid #e1e1e1; border-left: none; background: #fff; color: #666; padding-right: 20px; }
+        .search-box .btn:hover { border-color: var(--primary-color); background: var(--primary-color); color: #fff; }
+
+        /* Icon Header */
+        .header-icon-btn { display: flex; flex-direction: column; align-items: center; color: #555; margin-left: 25px; cursor: pointer; transition: 0.2s; position: relative; }
+        .header-icon-btn:hover { color: var(--primary-color); transform: translateY(-2px); }
+        .header-icon-btn i { font-size: 1.5rem; margin-bottom: 3px; }
+        .header-icon-btn span { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+        
+        .cart-badge { position: absolute; top: -5px; right: -8px; background-color: #ff3b30; color: #fff; font-size: 0.7rem; font-weight: bold; padding: 1px 6px; border-radius: 50%; border: 2px solid #fff; }
+
+        /* --- MENU CHÍNH --- */
+        .navbar-main { background: linear-gradient(90deg, var(--primary-color), var(--primary-dark)); padding: 0; }
+        
+        .navbar-main .nav-link { 
+            color: #fff !important; padding: 14px 20px !important; font-weight: 600; 
+            text-transform: uppercase; font-size: 0.9rem; transition: all 0.3s; 
+            border-right: 1px solid rgba(255,255,255,0.1); 
+        }
+        
+        .navbar-main .nav-link.brand-link {
+            color: #FFD700 !important; font-weight: 700; text-shadow: 0px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        .navbar-main .nav-link:hover { 
+            color: #fff !important; background-color: rgba(255,255,255,0.15); 
+            transform: translateY(-1px); text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+        
+        .navbar-main .nav-item:first-child .nav-link { border-left: 1px solid rgba(255,255,255,0.1); }
+
+        /* Footer */
+        footer { background-color: #fff; color: #444; padding-top: 60px; margin-top: auto; border-top: 5px solid var(--primary-color); }
+        footer h5 { color: var(--primary-color); font-weight: 800; margin-bottom: 25px; text-transform: uppercase; font-size: 1.1rem; }
+        footer ul li { margin-bottom: 12px; }
+        footer a { color: #666; font-weight: 500; }
+        footer a:hover { color: var(--primary-color); padding-left: 5px; }
+        
+        .footer-social a { display: inline-flex; width: 40px; height: 40px; background: #f0f2f5; color: var(--primary-color); border-radius: 50%; align-items: center; justify-content: center; margin-right: 10px; transition: 0.3s; font-size: 1.2rem; }
+        .footer-social a:hover { background: var(--primary-color); color: #fff; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,86,179,0.3); }
+        
+        .copyright { background-color: #1a202c; padding: 20px 0; margin-top: 50px; font-size: 0.9rem; text-align: center; color: #a0aec0; }
+
+        /* Dropdown User */
+        .dropdown-menu { border-radius: 10px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        .dropdown-item { padding: 10px 20px; font-size: 0.9rem; font-weight: 500; }
+        .dropdown-item:active { background-color: var(--primary-color); }
+        
+        /* Back to top */
+        #btnBackToTop { position: fixed; bottom: 30px; right: 30px; z-index: 99; display: none; border: none; background-color: var(--primary-color); color: white; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; box-shadow: 0 4px 15px rgba(0,86,179,0.4); transition: 0.3s; }
+        #btnBackToTop:hover { background-color: var(--primary-dark); transform: translateY(-5px); }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+
+        <div class="top-header">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="d-none d-md-block"><small><i class="fa-solid fa-shield-halved me-1"></i> Cam kết chính hãng 100% - Bảo hành tận tâm</small></div>
+                <div>
+                    <a href="#"><i class="fa-solid fa-envelope me-1"></i> contact@laptoptrunghieu.com</a>
+                    <a href="#"><i class="fa-solid fa-phone me-1"></i> 0396829310</a>
+                </div>
+            </div>
+        </div>
+
+        <header class="main-header sticky-top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-6 col-md-3">
+                        <a href='<%= ResolveUrl("~/Default.aspx") %>' class="brand-logo">
+                            <i class="fa-brands fa-windows"></i> Trung Hiếu
+                        </a>
+                    </div>
+                    
+                    <div class="col-md-5 d-none d-md-block">
+                        <div class="input-group search-box">
+                            <asp:TextBox ID="txtTimKiem" runat="server" CssClass="form-control" placeholder="Bạn muốn tìm máy gì hôm nay?..." />
+                            <asp:LinkButton ID="btnTimKiem" runat="server" CssClass="btn" OnClick="btnTimKiem_Click">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </asp:LinkButton>
+                        </div>
+                    </div>
+
+                    <div class="col-6 col-md-4 d-flex justify-content-end align-items-center">
+                        <a href='<%= ResolveUrl("~/Carts.aspx") %>' class="header-icon-btn text-decoration-none">
+                            <div class="position-relative">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                                <asp:Label ID="lblCartCount" runat="server" CssClass="cart-badge" Text="0"></asp:Label>
+                            </div>
+                            <span>Giỏ hàng</span>
+                        </a>
+
+                        <div class="dropdown ms-3">
+                            <asp:PlaceHolder ID="pnlGuest" runat="server">
+                                <div class="header-icon-btn" data-bs-toggle="dropdown">
+                                    <i class="fa-regular fa-user"></i><span>Tài khoản</span>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end mt-3">
+                                    <li><a class="dropdown-item" href='<%= ResolveUrl("~/Login.aspx") %>'><i class="fa-solid fa-right-to-bracket me-2 text-primary"></i> Đăng nhập</a></li>
+                                    <li><a class="dropdown-item" href='<%= ResolveUrl("~/Register.aspx") %>'><i class="fa-solid fa-user-plus me-2 text-success"></i> Đăng ký</a></li>
+                                </ul>
+                            </asp:PlaceHolder>
+
+                            <asp:PlaceHolder ID="pnlUser" runat="server" Visible="false">
+                                <div class="header-icon-btn text-primary fw-bold" data-bs-toggle="dropdown">
+                                    <i class="fa-solid fa-user-check"></i>
+                                    <span><asp:Label ID="lblHoTen" runat="server"></asp:Label></span>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end mt-3 shadow-sm border-0">
+                                    
+                                    <asp:PlaceHolder ID="pnlAdminMenu" runat="server" Visible="false">
+                                        <li><a class="dropdown-item fw-bold text-danger" href='<%= ResolveUrl("~/Admin/Dashboard.aspx") %>'><i class="fa-solid fa-gauge-high me-2"></i> Trang quản trị</a></li>
+                                        <li><a class="dropdown-item" href='<%= ResolveUrl("~/Admin/QuanLyDonHang.aspx") %>'><i class="fa-solid fa-clipboard-list me-2"></i> Quản lý đơn hàng</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    </asp:PlaceHolder>
+                                    
+                                    <asp:PlaceHolder ID="pnlCustomerMenu" runat="server" Visible="false">
+                                        <li><a class="dropdown-item" href='<%= ResolveUrl("~/ThongTinCaNhan.aspx") %>'><i class="fa-regular fa-id-card me-2"></i> Thông tin tài khoản</a></li>
+                                        <li><a class="dropdown-item" href='<%= ResolveUrl("~/DonHangCuaToi.aspx") %>'><i class="fa-solid fa-box-open me-2 text-primary"></i> Lịch sử mua hàng</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                    </asp:PlaceHolder>
+                                    
+                                    <li><asp:LinkButton ID="btnLogout" runat="server" CssClass="dropdown-item text-secondary" OnClick="btnLogout_Click"><i class="fa-solid fa-power-off me-2"></i> Đăng xuất</asp:LinkButton></li>
+                                </ul>
+                            </asp:PlaceHolder>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-main shadow-sm">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href='<%= ResolveUrl("~/Default.aspx") %>'><i class="fa-solid fa-house-chimney me-1"></i> Trang chủ</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href='<%= ResolveUrl("~/GioiThieu.aspx") %>'><i class="fa-solid fa-circle-info me-1"></i> Giới thiệu</a>
+                        </li>
+
+                        <asp:Repeater ID="rptMenuHang" runat="server">
+                            <ItemTemplate>
+                                <li class="nav-item">
+                                    <a class="nav-link brand-link" href='<%# ResolveUrl("~/Default.aspx?hang=" + Eval("MaTH")) %>'>
+                                        <%# Eval("TenTH") %>
+                                    </a>
+                                </li>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </ul>
+                    <div class="text-white fw-bold d-none d-lg-block">
+                        <i class="fa-solid fa-truck-fast me-2"></i> FREESHIP TOÀN QUỐC
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow-1 py-4">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+        </main>
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <h5>Laptop Trung Hiếu</h5>
+                        <p class="text-muted mb-3">
+                            Chuyên cung cấp các dòng Laptop chính hãng, nhập khẩu US/UK với chất lượng tốt nhất và giá cả cạnh tranh.
+                        </p>
+                        <div class="footer-social">
+                            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                            <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h5>Hỗ trợ khách hàng</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#"><i class="fa-solid fa-angle-right me-2"></i> Hướng dẫn mua hàng online</a></li>
+                            <li><a href="#"><i class="fa-solid fa-angle-right me-2"></i> Chính sách bảo hành & Đổi trả</a></li>
+                            <li><a href="#"><i class="fa-solid fa-angle-right me-2"></i> Vận chuyển & Thanh toán</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <h5>Liên hệ</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fa-solid fa-location-dot me-2 text-primary"></i> TP. Bến Tre, Tỉnh Bến Tre</li>
+                            <li class="my-2"><i class="fa-solid fa-phone me-2 text-primary"></i> 0396829310</li>
+                            <li><i class="fa-solid fa-envelope me-2 text-primary"></i> laptoptrunghieu@gmail.com</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <div class="container">
+                    &copy; <%= DateTime.Now.Year %> <strong>Laptop Trung Hiếu</strong>. All Rights Reserved. - MSV: 170124062 -Mã lớp: DK24TTK1
+                </div>
+            </div>
+        </footer>
+
+        <button type="button" id="btnBackToTop" title="Lên đầu trang"><i class="fa-solid fa-arrow-up"></i></button>
+    </form>
+
+    <script>
+        let mybutton = document.getElementById("btnBackToTop");
+        window.onscroll = function () {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)
+                mybutton.style.display = "block";
+            else
+                mybutton.style.display = "none";
+        };
+        mybutton.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
